@@ -9,7 +9,7 @@ vector<int> arr(n + 1);
 /*
 * 单点查询 + 单点修改
 * 查询：原数组为arr，直接按照lowbit计算即可
-* 修改：不断增加lowbit， 将对应位加上x
+* 修改：不断增加lowbit， 将对应位加上val
 */
 int tree[n + 1];
 // 构建树状数组
@@ -40,7 +40,7 @@ int getSum(int x) {
 /*
 * 单点查询 + 区间修改
 * 查询：原数组为arr，设d[i] = a[i] - a[i - 1]，则求a[i]可通过d[i]的前缀和查询
-* 修改：当给区间[l, r]加x时，只需给d[l]加上x，d[r + 1]减去x即可（差分思想）
+* 修改：当修改区间[l, r]时，只需给d[l]加上delta，d[r + 1]减去delta即可（差分思想）
 */
 int d[n + 1]; // 维护差分数组d
 
@@ -81,7 +81,7 @@ int query(int x) {
           = n * d[1] +(n - 1) * d[2] + ... +1 * d[n]
           = (n + 1) * (d[1] + d[2]+...+ d[n]) - (1 * d[1] + 2 * d[2] + ... + n * d[n])
 		因此可用一个辅助数组c来维护c[i] = i * d[i]的值
-* 修改：当给区间[l, r]加x时，需给d[l]加上x，d[r + 1]减去x，c[l]加上idx * delta，c[r + 1]加上-idx * delta
+* 修改：当修改区间[l, r]时，需给d[l]加上delta，d[r + 1]减去delta，c[l]加上idx * delta，c[r + 1]加上-idx * delta
 */
 
 // 注意：区间求和数据较大，可能需要long long
