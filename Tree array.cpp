@@ -9,7 +9,7 @@ vector<int> arr(n + 1);
 /*
 * 单点查询 + 单点修改
 * 查询：原数组为arr，直接按照lowbit计算即可
-* 修改：不断增加lowbit， 将对应位加上val
+* 修改：将对应位加上val
 */
 int tree[n + 1];
 // 构建树状数组
