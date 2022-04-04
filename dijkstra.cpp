@@ -2,7 +2,7 @@
 
 using namespace std;
 
-const int maxn = 100;
+const int maxn = 1000;
 const int inf = 0x3ffff;
 
 // 边信息
