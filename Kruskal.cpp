@@ -2,7 +2,7 @@
 
 using namespace std;
 
-const int maxn = 100;
+const int maxn = 1000;
 
 struct edge {
 	int u, v, cost;
