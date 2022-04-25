@@ -2,8 +2,8 @@
 
 using namespace std;
 
-const int maxn = 100; // 点的上限
-const int inf = 0x3ffff; // 每个点默认距离最大化
+const int maxn = 1000;
+const int inf = 0x3ffff; 
 
 int graph[maxn][maxn];
 // 顶点个数和边的个数
