@@ -154,7 +154,7 @@ void adjustHeap(vector<int>& nums, int i, int len) {
 
 void buildHeap(vector<int>& nums, int len) {
     // 注意这里下标从0开始，取len / 2
-    for (int i = len / 2; i >= 0; --i) {
+    for (int i =（len - 1) / 2; i >= 0; --i) {
         adjustHeap(nums, i, len);
     }
 }
