@@ -183,7 +183,7 @@ void countSort(vector<int> nums) {
         ++bucket[x - min];
     }
     int idx = 0;
-    for (int i = 0; i < bucket.size(); ++i) {
+    for (int i = 0; i < (int)bucket.size(); ++i) {
         for (int j = 0; j < bucket[i]; ++j) {
             nums[idx++] = i + min;
         }
