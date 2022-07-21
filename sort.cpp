@@ -9,7 +9,7 @@ int n;
 template <typename func, typename T>
 void print(func name, T&& nums) {
     cout << name << ": ";
-    for (const auto& x: nums) {
+    for (const auto& x : nums) {
         cout << x << " ";
     }
     cout << endl;
@@ -82,7 +82,8 @@ void merge(vector<int>& nums, int l, int mid, int r) {
     while (lhs <= mid && rhs <= r) {
         if (nums[lhs] < nums[rhs]) {
             temp[idx++] = nums[lhs++];
-        } else {
+        }
+        else {
             temp[idx++] = nums[rhs++];
         }
     }
@@ -97,7 +98,7 @@ void merge(vector<int>& nums, int l, int mid, int r) {
     }
 }
 
-void mergeSort(vector<int>& nums, int l, int r) {
+void mergeSort(vector<int> nums, int l, int r) {
     if (l == r) {
         return;
     }
@@ -127,7 +128,7 @@ int partition(vector<int>& nums, int left, int right) {
     return left;
 }
 
-void quickSort(vector<int>& nums, int l, int r) {
+void quickSort(vector<int> nums, int l, int r) {
     if (l < r) {
         int index = partition(nums, l, r);
         quickSort(nums, l, index - 1);
@@ -154,7 +155,7 @@ void adjustHeap(vector<int>& nums, int i, int len) {
 
 void buildHeap(vector<int>& nums, int len) {
     // 注意这里下标从0开始，取len / 2
-    for (int i =（len - 1) / 2; i >= 0; --i) {
+    for (int i = (len - 1) / 2; i >= 0; --i) {
         adjustHeap(nums, i, len);
     }
 }
@@ -178,7 +179,7 @@ void countSort(vector<int> nums) {
     int min = *min_element(nums.begin(), nums.end());
     int max = *max_element(nums.begin(), nums.end());
     vector<int> bucket(max - min + 1, 0);
-    for (const auto& x: nums) {
+    for (const auto& x : nums) {
         ++bucket[x - min];
     }
     int idx = 0;
@@ -190,16 +191,57 @@ void countSort(vector<int> nums) {
     print("countSort", nums);
 }
 
+void radixSort(vector<int> nums) {
+    // 计算最大数有多少位
+    int bit = 0;
+    auto count = [](int num) {
+        int cnt = num ? 0 : 1;
+        while (num) {
+            num /= 10;
+            ++cnt;
+        }
+        return cnt;
+    };
+    // 取倒数第len位数字
+    auto extract = [](int num, int len) {
+        while (--len && num) {
+            num /= 10;
+        }
+        return num % 10;
+    };
+    for (const int x : nums) {
+        bit = max(bit, count(x));
+    }
+    // 循环bit次，每一次对上一次排序的结果进行新一轮基数排序
+    for (int i = 1; i <= bit; ++i) {
+        // 桶，存储当前位为下标i的数字
+        vector<vector<int>> bucket(10);
+        for (int x : nums) {
+            bucket[extract(x, i)].push_back(x);
+        }
+        // 遍历每个桶，将其中数字依次取出
+        int idx = 0;
+        for (int j = 0; j < 10; ++j) {
+            for (int digit : bucket[j]) {
+                nums[idx++] = digit;
+            }
+        }
+        cout << "第" << i << "轮";
+        print("基数排序：", nums);
+    }
+}
+
 int main() {
-    vector<int> nums{2, 3, 38, 5, 47, 15, 36, 26, 27, 44, 46, 4, 19, 50, 48};
-    n = static_cast<int>(nums.size());
-    bubbleSort(nums);
-    selectionSort(nums);
-    insertSort(nums);
-    shellSort(nums);
-    mergeSort(nums, 0, n - 1);
-    quickSort(nums, 0, n - 1);
-    heapSort(nums);
-    countSort(nums);
+    vector<int> arr{ 2, 3, 38, 5, 47, 15, 36, 26, 27, 44, 46, 4, 19, 50, 48 };
+    n = static_cast<int>(arr.size());
+    bubbleSort(arr);
+    selectionSort(arr);
+    insertSort(arr);
+    shellSort(arr);
+    mergeSort(arr, 0, n - 1);
+    quickSort(arr, 0, n - 1);
+    heapSort(arr);
+    countSort(arr);
+    radixSort(arr);
     return 0;
 }
