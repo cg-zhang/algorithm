@@ -1,15 +1,12 @@
-#include <iostream>
-#include <vector>
-#include <algorithm>
+#include <bits/stdc++.h>
 
 using namespace std;
 
 int n;
 
-template <typename func, typename T>
-void print(func name, T&& nums) {
+template <typename func, typename T> void print(func name, T &&nums) {
     cout << name << ": ";
-    for (const auto& x : nums) {
+    for (const auto &x : nums) {
         cout << x << " ";
     }
     cout << endl;
@@ -74,7 +71,8 @@ void shellSort(vector<int> nums) {
     print("shellSort", nums);
 }
 
-void merge(vector<int>& nums, int l, int mid, int r) {
+// 需要额外空间的归并
+void merge(vector<int> &nums, int l, int mid, int r) {
     vector<int> temp(r - l + 1);
     // 两个有序序列的起始位置
     int idx = 0;
@@ -82,8 +80,7 @@ void merge(vector<int>& nums, int l, int mid, int r) {
     while (lhs <= mid && rhs <= r) {
         if (nums[lhs] < nums[rhs]) {
             temp[idx++] = nums[lhs++];
-        }
-        else {
+        } else {
             temp[idx++] = nums[rhs++];
         }
     }
@@ -95,6 +92,24 @@ void merge(vector<int>& nums, int l, int mid, int r) {
     }
     for (int i = 0; i < r - l + 1; ++i) {
         nums[l + i] = temp[i];
+    }
+}
+
+// 不适用额外空间进行归并
+void merge(vector<int> &nums, int l, int mid, int r) {
+    int idx = l;
+    int lhs = l, rhs = mid + 1;
+    while (lhs <= mid && rhs <= r) {
+        if (nums[lhs] > nums[rhs]) {
+            swap(nums[lhs], nums[rhs]);
+        }
+        ++lhs;
+    }
+    while (lhs <= mid) {
+        nums[idx++] = nums[lhs++];
+    }
+    while (rhs <= r) {
+        nums[idx++] = nums[rhs++];
     }
 }
 
@@ -112,7 +127,7 @@ void mergeSort(vector<int> nums, int l, int r) {
     }
 }
 
-int partition(vector<int>& nums, int left, int right) {
+int partition(vector<int> &nums, int left, int right) {
     int pivot = nums[left];
     while (left < right) {
         while (left < right && nums[right] > pivot) {
@@ -128,18 +143,38 @@ int partition(vector<int>& nums, int left, int right) {
     return left;
 }
 
+// 迭代法实现
+void quickSort(vector<int> nums) {
+    int n = nums.size();
+    stack<pair<int, int>> stk;
+    stk.emplace(0, n - 1);
+    while (!stk.empty()) {
+        auto [l, r] = stk.top();
+        stk.pop();
+        if (l >= r) {
+            continue;
+        }
+        int pivot = partition(nums, l, r);
+        stk.emplace(l, pivot - 1);
+        stk.emplace(pivot + 1, r);
+    }
+    print("quickSort迭代版", nums);
+    return;
+}
+
+// 递归法实现
 void quickSort(vector<int> nums, int l, int r) {
     if (l < r) {
         int index = partition(nums, l, r);
         quickSort(nums, l, index - 1);
         quickSort(nums, index + 1, r);
         if (r - l + 1 == n) {
-            print("quickSort", nums);
+            print("quickSort递归版", nums);
         }
     }
 }
 
-void adjustHeap(vector<int>& nums, int i, int len) {
+void adjustHeap(vector<int> &nums, int i, int len) {
     int maxIndex = i;
     if (i * 2 + 1 < len && nums[i * 2 + 1] > nums[maxIndex]) {
         maxIndex = i * 2 + 1;
@@ -153,7 +188,7 @@ void adjustHeap(vector<int>& nums, int i, int len) {
     }
 }
 
-void buildHeap(vector<int>& nums, int len) {
+void buildHeap(vector<int> &nums, int len) {
     // 注意这里下标从0开始，取len / 2
     for (int i = (len - 1) / 2; i >= 0; --i) {
         adjustHeap(nums, i, len);
@@ -179,7 +214,7 @@ void countSort(vector<int> nums) {
     int min = *min_element(nums.begin(), nums.end());
     int max = *max_element(nums.begin(), nums.end());
     vector<int> bucket(max - min + 1, 0);
-    for (const auto& x : nums) {
+    for (const auto &x : nums) {
         ++bucket[x - min];
     }
     int idx = 0;
@@ -226,13 +261,12 @@ void radixSort(vector<int> nums) {
                 nums[idx++] = digit;
             }
         }
-        cout << "第" << i << "轮";
-        print("基数排序：", nums);
+        print("radixSort" + to_string(i) + ":", nums);
     }
 }
 
 int main() {
-    vector<int> arr{ 2, 3, 38, 5, 47, 15, 36, 26, 27, 44, 46, 4, 19, 50, 48 };
+    vector<int> arr{2, 3, 38, 5, 47, 15, 36, 26, 27, 44, 46, 4, 19, 50, 48};
     n = static_cast<int>(arr.size());
     bubbleSort(arr);
     selectionSort(arr);
